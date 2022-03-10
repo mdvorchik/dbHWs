@@ -6,26 +6,26 @@
 <br>
 <code>
 db.users.aggregate( [<br>
----{$limit:1000},<br>
----{<br>
-------$lookup:<br>
----------{<br>
------------from: "ratings",<br>
------------let: { userid_in_ratings: "$userid" },<br>
------------ pipeline: [<br>
----------------{ $match:<br>
-------------------{ $expr:<br>
----------------------{ $and:<br>
-------------------------[<br>
---------------------------{ $eq: [ "$userid",  "$$userid_in_ratings" ] }<br>
-------------------------]<br>
----------------------}<br>
-------------------}<br>
----------------}<br>
-------------],<br>
-------------as: "rating_info"<br>
-----------}<br>
-----}<br>
+   {$limit:1000},<br>
+   {<br>
+      $lookup:<br>
+         {<br>
+           from: "ratings",<br>
+           let: { userid_in_ratings: "$userid" },<br>
+            pipeline: [<br>
+               { $match:<br>
+                  { $expr:<br>
+                     { $and:<br>
+                        [<br>
+                          { $eq: [ "$userid",  "$$userid_in_ratings" ] }<br>
+                        ]<br>
+                     }<br>
+                  }<br>
+               }<br>
+            ],<br>
+            as: "rating_info"<br>
+          }<br>
+    }<br>
 ] ).explain("executionStats")<br>
 </code>
 <br>
@@ -46,9 +46,9 @@ executionTimeMillis: 406<br>
 Сам запрос:<br>
 <code>
 db.ratings.update(<br>
---{},<br>
---[{ $set: { str1: { $concat: [ "$str1", "1" ] } } }],<br>
---{ multi: true }<br>
+  {},<br>
+  [{ $set: { str1: { $concat: [ "$str1", "1" ] } } }],<br>
+  { multi: true }<br>
 )<br>
 </code>
 <br>
